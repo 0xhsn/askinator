@@ -15,21 +15,21 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Askinator",
+  title: "ask @macdoos",
   description: "backend bro does frontend stuff kind of project",
   twitter: {
     card: "summary",
-    site: "https://ask.omaryahya.net",
+    site: "https://ask.macdoos.lol",
     creator: "Omar Yahya",
-    images: "https://ask.omaryahya.net/twitter_og.png",
+    images: "https://ask.macdoos.lol/twitter_og.png",
   },
   openGraph: {
     type: "website",
-    url: "https://ask.omaryahya.net",
-    title: "Askinator",
+    url: "https://ask.macdoos.lol",
+    title: "macdpp",
     description: "Ask me anonymous questions",
-    siteName: "Askinator",
-    images: [{ url: "https://ask.omaryahya.net/og.png" }],
+    siteName: "ask @macdoos",
+    images: [{ url: "https://ask.macdoos.lol/og.png" }],
   },
 };
 

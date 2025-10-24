@@ -45,7 +45,7 @@ export default function DashboardAnswerCard({
   const tweetText = `Q: ${truncatedQuestion}\n\nA: ${truncatedAnswer}`;
 
   const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(
-    tweetText + "\n " + "https://ask.omaryahya.net"
+    tweetText + "\n " + "https://ask.macdoos.lol"
   )}`;
 
   const handleSubmit = () => {

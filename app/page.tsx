@@ -43,7 +43,7 @@ export default function Home() {
   return (
     <main className="flex flex-col gap-6 mt-16 font-sans w-10/12 mx-auto h-auto max-w-sm md:max-w-lg">
       <div className="flex flex-row items-center justify-between">
-        <p className="text-3xl font-bold tracking-tight">Askinator</p>
+        <p className="text-3xl font-bold tracking-tight">ask @macdoos</p>
         <ModeToggle />
       </div>
       <QuestionForm submitQuestion={submitQuestion} />
