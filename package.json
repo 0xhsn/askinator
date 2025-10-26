@@ -10,7 +10,11 @@
 		"pages:build": "pnpm next-on-pages",
 		"preview": "pnpm pages:build && wrangler pages dev",
 		"deploy": "pnpm pages:build && wrangler pages deploy",
-		"cf-typegen": "wrangler types --env-interface CloudflareEnv ./env.d.ts"
+		"d1:create": "wrangler d1 create askinator-db",
+		"d1:push": "drizzle-kit push --config=drizzle.config.ts",
+		"d1:studio": "drizzle-kit studio --config=drizzle.config.ts",
+		"d1:execute": "wrangler d1 execute askinator-db",
+		"cf-typegen": "wrangler types --env-interface CloudflareEnv ./worker-configuration.d.ts"
 	},
 	"dependencies": {
 		"@radix-ui/react-avatar": "^1.1.10",
