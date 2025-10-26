@@ -20,16 +20,16 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary",
     site: "https://ask.macdoos.lol",
-    creator: "Omar Yahya",
-    images: "https://ask.macdoos.lol/twitter_og.png",
+    creator: "macdoos",
+    images: "/twitter_org.png",
   },
   openGraph: {
     type: "website",
     url: "https://ask.macdoos.lol",
-    title: "macdpp",
-    description: "Ask me anonymous questions",
+    title: "ask macdoos",
+    description: "ama",
     siteName: "ask @macdoos",
-    images: [{ url: "https://ask.macdoos.lol/og.png" }],
+    images: [{ url: "/twitter_org.png" }],
   },
 };
 
