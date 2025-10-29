@@ -26,6 +26,9 @@ export default async function Cards() {
 
   return (
     <>
+      <div className="flex items-center justify-between mb-2 font-sans">
+        <p className="text-sm text-muted-foreground">Answered: {answeredQuestions.length}</p>
+      </div>
       <div className="flex flex-col font-sans gap-4 mb-2">
         {answeredQuestions.map(({ id, question_text, asker_name, answer }) => (
           <div key={id} className="flex flex-col gap-1">
@@ -40,6 +43,7 @@ export default async function Cards() {
                   <AvatarFallback>AN</AvatarFallback>
                 </Avatar>
                 <div className="font-medium text-sm/tight">{asker_name}</div>
+                <span className="ml-auto text-[10px] px-2 py-0.5 rounded bg-muted text-muted-foreground">#{id}</span>
               </div>
               <div className="">
                 <p

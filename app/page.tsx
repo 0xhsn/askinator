@@ -1,11 +1,9 @@
-import { getRequestContext } from "@cloudflare/next-on-pages";
-import createDB from "@/db";
-import { questions } from "@/db/migrations/schema";
 import { ModeToggle } from "@/components/theme-toggle";
 import Cards from "@/components/cards";
 import { generateRandomName } from "@/lib/names";
 import QuestionForm from "@/components/questionform";
 import z from "zod";
+import { headers } from "next/headers";
 
 export const runtime = "edge";
 
@@ -14,9 +12,6 @@ export default function Home() {
     "use server";
 
     const rawFormData = formData.get("question-text");
-
-    const DB = getRequestContext().env.DB;
-    const drizzle = createDB(DB);
 
     const zSchema = z
       .string()
@@ -30,13 +25,20 @@ export default function Home() {
     }
 
     const askerName = generateRandomName();
-    const isAnswered = false;
-
-    await drizzle.insert(questions).values({
-      questionText: result.data,
-      askerName,
-      isAnswered,
+    const hdrs = await headers();
+    const host = hdrs.get("host") || "";
+    const proto = hdrs.get("x-forwarded-proto") || "https";
+    const baseUrl = host ? `${proto}://${host}` : "";
+    const resp = await fetch(`${baseUrl}/api/questions`, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ questionText: result.data, askerName }),
+      cache: "no-store",
     });
+    if (!resp.ok) {
+      const text = await resp.text().catch(() => "");
+      return { error: text || `Failed to send question (${resp.status})`, success: false };
+    }
 
     return { success: true };
   }
