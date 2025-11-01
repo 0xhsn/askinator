@@ -1,9 +1,21 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
+@font-face {
+  font-family: "Sky";
+  src: url("/fonts/sky.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
 @custom-variant dark (&:is(.dark *));
 
 :root {
+  --font-sans: var(--font-sf-mono);
+  --font-mono: var(--font-sf-mono);
+  --font-sky: "Sky", "SF Mono", ui-monospace, Menlo, Monaco, Consolas,
+    "Liberation Mono", "Courier New", monospace;
   --base-50: oklch(0.9827 0.0026 286.35);
   --base-100: oklch(0.967 0.0029 285.94);
   --base-200: oklch(0.9201 0.0036 285.89);
@@ -77,6 +89,10 @@
   --sidebar-ring: var(--primary-500);
 }
 
+:lang(ar), [dir="rtl"] {
+  font-family: var(--font-sky);
+}
+
 .dark {
   --background: var(--base-950);
   --foreground: var(--base-200);
@@ -112,8 +128,9 @@
 }
 
 @theme inline {
-  --font-sans: var(--font-rubik);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-sf-mono);
+  --font-mono: var(--font-sf-mono);
+  --font-sky: var(--font-sky);
   --color-base-50: var(--base-50);
   --color-base-100: var(--base-100);
   --color-base-200: var(--base-200);
@@ -196,5 +213,8 @@
   }
   body {
     @apply bg-background text-foreground;
+  }
+  .font-sky {
+    font-family: var(--font-sky);
   }
 }
