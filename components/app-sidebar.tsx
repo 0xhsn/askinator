@@ -26,15 +26,12 @@ export function AppSidebar() {
           <SidebarGroupLabel>Questions</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {items.map((items) => (
-                <SidebarMenuItem key={items.title}>
-                  <SidebarMenuButton>
-                    <Link
-                      href={items.url}
-                      className="flex flex-row items-center gap-4 mx-2"
-                    >
-                      <items.icon />
-                      <span>{items.title}</span>
+              {items.map((item) => (
+                <SidebarMenuItem key={item.title}>
+                  <SidebarMenuButton asChild>
+                    <Link href={item.url}>
+                      <item.icon />
+                      <span>{item.title}</span>
                     </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>

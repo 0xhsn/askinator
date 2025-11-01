@@ -1,11 +1,13 @@
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
+import { Card, CardContent, CardHeader } from "./ui/card";
+import { Badge } from "./ui/badge";
 import { getRequestContext } from "@cloudflare/next-on-pages";
 import createDB from "@/db";
 import { desc, eq } from "drizzle-orm";
 import { questions } from "@/db/migrations/schema";
-import { LucideCornerLeftUp } from "lucide-react";
+import { CornerLeftUp } from "lucide-react";
 import { avatars } from "@/lib/avatars";
-import { clsx } from "clsx";
+import { cn } from "@/lib/utils";
 import { containsArabic } from "@/lib/text";
 export const runtime = "edge";
 
@@ -27,31 +29,41 @@ export default async function Cards() {
     .orderBy(desc(questions.updatedAt));
 
   return (
-    <>
-      <div className="flex flex-col font-sans gap-4 mb-2">
-        {answeredQuestions.map(({ id, question_text, asker_name, answer }) => {
-          const questionIsArabic = containsArabic(question_text);
-          const answerIsArabic = containsArabic(answer);
+    <div className="flex flex-col font-sans gap-4 mb-2">
+      {answeredQuestions.map(({ id, question_text, asker_name, answer }) => {
+        const questionIsArabic = containsArabic(question_text);
+        const answerIsArabic = containsArabic(answer);
 
-          return (
-            <div key={id} className="flex flex-col gap-1">
-            <div className="h-auto gap-2 border rounded-xl py-4 bg-card text-card-foreground">
-              <div className="flex flex-row items-center gap-2 mx-6 pb-2">
-                <Avatar className="w-[25px] h-[25px]">
-                  <AvatarImage
-                    src={`${
-                      avatars[Math.floor(Math.random() * avatars.length)]
-                    }`}
-                  />
-                  <AvatarFallback>AN</AvatarFallback>
-                </Avatar>
-                <div className="font-medium text-sm/tight">{asker_name}</div>
-                <span className="ml-auto text-[10px] px-2 py-0.5 rounded bg-muted text-muted-foreground">#{id}</span>
-              </div>
-              <div className="">
+        return (
+          <div key={id} className="flex flex-col gap-2">
+            <Card>
+              <CardHeader>
+                <div className="flex flex-row items-center gap-2">
+                  <Avatar className="w-6 h-6">
+                    <AvatarImage
+                      src={`${
+                        avatars[Math.floor(Math.random() * avatars.length)]
+                      }`}
+                    />
+                    <AvatarFallback>AN</AvatarFallback>
+                  </Avatar>
+                  <div className="font-medium text-sm">{asker_name}</div>
+                  <Badge 
+                    style={{
+                      backgroundColor: 'rgb(249 115 22)',
+                      color: 'white',
+                      borderColor: 'rgb(249 115 22)'
+                    }}
+                    className="ml-auto [&]:bg-orange-500 [&]:text-white [&]:border-orange-500 dark:[&]:bg-orange-600 dark:[&]:text-white dark:[&]:border-orange-600"
+                  >
+                    #{id}
+                  </Badge>
+                </div>
+              </CardHeader>
+              <CardContent>
                 <p
-                  className={clsx(
-                    "text-sm/snug px-6 break-words whitespace-pre-wrap",
+                  className={cn(
+                    "text-sm break-words whitespace-pre-wrap",
                     questionIsArabic && "font-sky"
                   )}
                   dir={questionIsArabic ? "rtl" : "auto"}
@@ -59,29 +71,28 @@ export default async function Cards() {
                 >
                   {question_text}
                 </p>
-              </div>
-            </div>
-            <div className="flex items-center justify-evenly ml-2">
-              <LucideCornerLeftUp className="" />
-              <div className="bg-accent py-2 rounded-xl grow">
-                <div className="max-h-56 overflow-y-auto px-3">
+              </CardContent>
+            </Card>
+            <div className="flex items-start gap-2 ml-4">
+              <CornerLeftUp className="w-5 h-5 text-muted-foreground shrink-0 mt-1" />
+              <Card className="grow bg-muted/50">
+                <CardContent>
                   <p
                     dir={answerIsArabic ? "rtl" : "auto"}
                     lang={answerIsArabic ? "ar" : undefined}
-                    className={clsx(
-                      "text-sm/snug px-3 break-words whitespace-pre-wrap",
+                    className={cn(
+                      "text-sm break-words whitespace-pre-wrap",
                       answerIsArabic && "font-sky"
                     )}
                   >
                     {answer}
                   </p>
-                </div>
-              </div>
+                </CardContent>
+              </Card>
             </div>
           </div>
-          );
-        })}
-      </div>
-    </>
+        );
+      })}
+    </div>
   );
 }

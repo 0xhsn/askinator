@@ -29,18 +29,18 @@
   --base-950: oklch(0.1408 0.0034 285.39);
   --base-1000: oklch(0.0957 0.0031 285.31);
 
-  --primary-50: oklch(0.9653 0.0165 280.29);
-  --primary-100: oklch(0.9354 0.0305 280.9);
-  --primary-200: oklch(0.8793 0.059 281.2);
-  --primary-300: oklch(0.7949 0.108 281.73);
-  --primary-400: oklch(0.6839 0.1735 283.11);
-  --primary-500: oklch(0.5793 0.2276 282.92);
-  --primary-600: oklch(0.5223 0.2559 282.93);
-  --primary-700: oklch(0.4697 0.2389 282.81);
-  --primary-800: oklch(0.4108 0.1986 283.09);
-  --primary-900: oklch(0.367 0.1528 284.29);
-  --primary-950: oklch(0.2669 0.1037 284.93);
-  --primary-1000: oklch(0.202 0.0718 285.35);
+  --primary-50: oklch(0.985 0.002 286);
+  --primary-100: oklch(0.97 0.003 286);
+  --primary-200: oklch(0.92 0.005 286);
+  --primary-300: oklch(0.87 0.006 286);
+  --primary-400: oklch(0.71 0.007 286);
+  --primary-500: oklch(0.55 0.008 286);
+  --primary-600: oklch(0.44 0.007 286);
+  --primary-700: oklch(0.37 0.006 286);
+  --primary-800: oklch(0.27 0.005 286);
+  --primary-900: oklch(0.21 0.004 286);
+  --primary-950: oklch(0.14 0.003 286);
+  --primary-1000: oklch(0.10 0.003 286);
 
   --secondary-50: oklch(0.9708 0.0118 0.46);
   --secondary-100: oklch(0.9447 0.0236 0.17);
@@ -55,14 +55,14 @@
   --secondary-950: oklch(0.2764 0.086 7.11);
   --secondary-1000: oklch(0.1901 0.0598 8.2);
 
-  --background: var(--base-50);
+  --background: #ffffff;
   --foreground: var(--base-800);
   --card: var(--color-white);
   --card-foreground: var(--base-800);
   --popover: var(--color-white);
   --popover-foreground: var(--base-800);
-  --primary: var(--primary-500);
-  --primary-foreground: var(--color-white);
+  --primary: var(--base-900);
+  --primary-foreground: var(--base-50);
   --secondary: var(--secondary-700);
   --secondary-foreground: var(--color-white);
   --muted: var(--base-100);
@@ -72,21 +72,21 @@
   --destructive: oklch(0.577 0.245 27.325);
   --border: var(--base-200);
   --input: var(--base-300);
-  --ring: var(--primary-500);
-  --chart-1: var(--primary-500);
+  --ring: var(--base-400);
+  --chart-1: var(--base-700);
   --chart-2: var(--secondary-700);
-  --chart-3: var(--primary-300);
+  --chart-3: var(--base-500);
   --chart-4: var(--secondary-300);
-  --chart-5: var(--primary-100);
+  --chart-5: var(--base-300);
   --radius: 1rem;
   --sidebar: var(--color-white);
   --sidebar-foreground: var(--base-800);
-  --sidebar-primary: var(--primary-500);
-  --sidebar-primary-foreground: var(--color-white);
+  --sidebar-primary: var(--base-900);
+  --sidebar-primary-foreground: var(--base-50);
   --sidebar-accent: var(--base-50);
   --sidebar-accent-foreground: var(--base-800);
   --sidebar-border: var(--base-200);
-  --sidebar-ring: var(--primary-500);
+  --sidebar-ring: var(--base-400);
 }
 
 :lang(ar), [dir="rtl"] {
@@ -94,14 +94,14 @@
 }
 
 .dark {
-  --background: var(--base-950);
+  --background: #000000;
   --foreground: var(--base-200);
   --card: var(--base-900);
   --card-foreground: var(--base-200);
   --popover: var(--base-900);
   --popover-foreground: var(--base-200);
-  --primary: var(--primary-500);
-  --primary-foreground: var(--color-white);
+  --primary: var(--base-50);
+  --primary-foreground: var(--base-900);
   --secondary: var(--secondary-700);
   --secondary-foreground: var(--color-white);
   --muted: var(--base-800);
@@ -111,20 +111,20 @@
   --destructive: oklch(0.704 0.191 22.216);
   --border: var(--base-800);
   --input: var(--base-700);
-  --ring: var(--primary-500);
-  --chart-1: var(--primary-500);
+  --ring: var(--base-600);
+  --chart-1: var(--base-300);
   --chart-2: var(--secondary-700);
-  --chart-3: var(--primary-300);
+  --chart-3: var(--base-500);
   --chart-4: var(--secondary-300);
-  --chart-5: var(--primary-100);
+  --chart-5: var(--base-700);
   --sidebar: var(--base-900);
   --sidebar-foreground: var(--base-200);
-  --sidebar-primary: var(--primary-500);
-  --sidebar-primary-foreground: var(--color-white);
+  --sidebar-primary: var(--base-50);
+  --sidebar-primary-foreground: var(--base-900);
   --sidebar-accent: var(--base-800);
   --sidebar-accent-foreground: var(--base-200);
   --sidebar-border: var(--base-800);
-  --sidebar-ring: var(--primary-500);
+  --sidebar-ring: var(--base-600);
 }
 
 @theme inline {

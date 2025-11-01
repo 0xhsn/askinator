@@ -4,6 +4,8 @@ import { useState, useEffect, useRef } from "react";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
+import { cn } from "@/lib/utils";
+import { useTheme } from "next-themes";
 
 type Props = {
   submitQuestion: (
@@ -18,7 +20,13 @@ export default function QuestionForm({ submitQuestion }: Props) {
   const [cooldown, setCooldown] = useState(0);
   const [text, setText] = useState("");
   const textareaRef = useRef<HTMLTextAreaElement>(null);
-  // i dont know how industry standard this workaround is, need to read more into it.
+  const { theme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   useEffect(() => {
     const saved = localStorage.getItem(COOLDOWN_KEY);
     if (saved) {
@@ -76,15 +84,22 @@ export default function QuestionForm({ submitQuestion }: Props) {
   const nearLimit = charCount > MAX_LENGTH * 0.9;
   const overLimit = charCount > MAX_LENGTH;
 
+  const isDark = mounted && theme === 'dark';
+  const buttonStyle = {
+    backgroundColor: isDark ? 'white' : 'black',
+    color: isDark ? 'black' : 'white',
+  };
+
   return (
-    <form action={handleSubmit} className="flex flex-col gap-4 shrink-0">
-      <div className="relative">
+    <form action={handleSubmit} className="flex flex-col gap-4 shrink-0 w-full">
+      <div className="relative w-full">
         <Textarea
           ref={textareaRef}
-          className={`resize-none font-medium border-2 min-h-32 ${
-            overLimit ? "border-red-500" : ""
-          }`}
-          placeholder="Send messages or whatever you like."
+          className={cn(
+            "resize-none font-medium min-h-32 w-full focus-visible:ring-foreground/20 focus-visible:border-foreground",
+            overLimit && "border-destructive focus-visible:ring-destructive focus-visible:border-destructive"
+          )}
+          placeholder="write smth..."
           required
           dir="auto"
           name="question-text"
@@ -92,25 +107,23 @@ export default function QuestionForm({ submitQuestion }: Props) {
           onChange={(e) => setText(e.target.value)}
         />
         <span
-          className={`absolute bottom-2 right-3 text-xs ${
-            overLimit
-              ? "text-red-500"
-              : nearLimit
-              ? "text-yellow-500"
-              : "text-muted-foreground"
-          }`}
+          className={cn(
+            "absolute bottom-3 right-3 text-xs pointer-events-none select-none mt-2",
+            overLimit && "text-destructive font-medium",
+            !overLimit && "text-muted-foreground"
+          )}
         >
           {charCount}/{MAX_LENGTH}
         </span>
       </div>
-      <div className="self-end">
-        <Button
-          type="submit"
-          disabled={cooldown > 0 || overLimit || charCount < 4}
-        >
-          {cooldown > 0 ? `Resend in ${cooldown}s` : "Send Message"}
-        </Button>
-      </div>
+      <Button
+        type="submit"
+        disabled={cooldown > 0 || overLimit || charCount < 4}
+        style={buttonStyle}
+        className="w-fit self-end hover:opacity-90 transition-opacity mt-4"
+      >
+        {cooldown > 0 ? `Resend in ${cooldown}s` : "send"}
+      </Button>
     </form>
   );
 }

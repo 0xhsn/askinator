@@ -1,14 +1,16 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useState, useTransition, useEffect } from "react";
 import type { MouseEvent } from "react";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
+import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import { Copy, Twitter } from "lucide-react";
-import { clsx } from "clsx";
-import Image from "next/image";
+import { cn } from "@/lib/utils";
 import { containsArabic } from "@/lib/text";
+import { useTheme } from "next-themes";
 
 type Props = {
   id: number;
@@ -31,6 +33,12 @@ export default function DashboardAnswerCard({
   const [isAnswered, setIsAnswered] = useState(answered);
   const [expanded, setExpanded] = useState(false);
   const [pending, startTransition] = useTransition();
+  const { theme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const answerText = isAnswered
     ? answer && answer.length > 0
@@ -73,60 +81,76 @@ export default function DashboardAnswerCard({
     });
   };
 
+  const isDark = mounted && theme === 'dark';
+  const buttonStyle = {
+    backgroundColor: isDark ? 'white' : 'black',
+    color: isDark ? 'black' : 'white',
+  };
+
   return (
-    <div
-      className={clsx(
-        "bg-card border rounded-xl p-4 space-y-3 hover:shadow transition cursor-pointer font-sans",
-        isAnswered
-          ? "border-green-500 bg-green-50 dark:bg-green-900/10"
-          : "border-gray-300"
+    <Card
+      className={cn(
+        "cursor-pointer font-sans transition-all hover:shadow-md",
+        isAnswered && "border-muted-foreground/20 bg-muted/30"
       )}
       onClick={() => setExpanded((prev) => !prev)}
     >
-      <div className="flex items-center gap-2">
-        <span className="text-sm font-medium">{askerName}</span>
-      </div>
-
-      <p
-        className={clsx(
-          "text-sm whitespace-pre-wrap break-words",
-          isQuestionArabic && "font-sky"
-        )}
-        dir={isQuestionArabic ? "rtl" : "auto"}
-        lang={isQuestionArabic ? "ar" : undefined}
-      >
-        {question}
-      </p>
-
-      <div
-        className={clsx(
-          "transition-all duration-300",
-          expanded
-            ? "max-h-[32rem] opacity-100 mt-2"
-            : "max-h-0 opacity-0 overflow-hidden"
-        )}
-        onClick={(e) => e.stopPropagation()} //read more on this
-      >
-        <div className="bg-accent p-3 rounded-md">
-          {!isAnswered && (
-            <>
-              <Textarea
-                dir="auto"
-                value={reply}
-                onChange={(e) => setReply(e.target.value)}
-                className="mb-2 resize-none"
-                placeholder="Write your reply..."
-              />
-              <Button onClick={handleSubmit} disabled={pending || isAnswered}>
-                {pending ? "Submitting..." : "Submit"}
-              </Button>
-            </>
-          )}
+      <CardHeader>
+        <div className="flex items-center gap-2">
+          <span className="text-sm font-medium">{askerName}</span>
           {isAnswered && (
-            <div className="flex flex-col gap-2">
-              <div className="max-h-56 overflow-y-auto rounded-md border border-border/40 bg-background/60 p-3 pr-4">
+            <Badge variant="outline" className="ml-auto">
+              Answered
+            </Badge>
+          )}
+        </div>
+      </CardHeader>
+
+      <CardContent className="space-y-3">
+        <p
+          className={cn(
+            "text-sm whitespace-pre-wrap break-words",
+            isQuestionArabic && "font-sky"
+          )}
+          dir={isQuestionArabic ? "rtl" : "auto"}
+          lang={isQuestionArabic ? "ar" : undefined}
+        >
+          {question}
+        </p>
+
+        <div
+          className={cn(
+            "transition-all duration-300",
+            expanded
+              ? "max-h-[40rem] opacity-100"
+              : "max-h-0 opacity-0 overflow-hidden"
+          )}
+          onClick={(e) => e.stopPropagation()}
+        >
+          <div className="pl-4 border-l-2 border-muted">
+            {!isAnswered && (
+              <div className="space-y-3">
+                <Textarea
+                  dir="auto"
+                  value={reply}
+                  onChange={(e) => setReply(e.target.value)}
+                  className="resize-none min-h-32 focus-visible:ring-foreground/20 focus-visible:border-foreground"
+                  placeholder="reply..."
+                />
+                <Button 
+                  onClick={handleSubmit} 
+                  disabled={pending || isAnswered}
+                  style={buttonStyle}
+                  className="hover:opacity-90 transition-opacity"
+                >
+                  {pending ? "submitting..." : "submit"}
+                </Button>
+              </div>
+            )}
+            {isAnswered && (
+              <div className="bg-muted/50 rounded-lg p-4">
                 <p
-                  className={clsx(
+                  className={cn(
                     "text-sm whitespace-pre-wrap break-words",
                     isAnswerArabic && "font-sky"
                   )}
@@ -136,35 +160,41 @@ export default function DashboardAnswerCard({
                   {answerText}
                 </p>
               </div>
-            </div>
-          )}
+            )}
+          </div>
         </div>
-      </div>
-      {isAnswered && (
-        <div
-          className="flex justify-end gap-2 pt-2"
-          onClick={(event) => event.stopPropagation()}
-        >
-          <button
-            type="button"
-            onClick={handleCopyAnswer}
-            className="flex items-center gap-1 rounded-md border border-transparent px-2 py-1 text-sm text-blue-500 transition-colors hover:border-blue-500 hover:bg-blue-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
-            aria-label="Copy answer"
-          >
-            <Copy className="h-4 w-4" />
-          </button>
-          <a
-            href={twitterUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-1 rounded-md border border-transparent px-2 py-1 text-sm text-blue-500 transition-colors hover:border-blue-500 hover:bg-blue-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
-            aria-label="Tweet answer"
+
+        {isAnswered && (
+          <div
+            className="flex justify-end gap-2"
             onClick={(event) => event.stopPropagation()}
           >
-            <Twitter className="h-4 w-4" />
-          </a>
-        </div>
-      )}
-    </div>
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={handleCopyAnswer}
+              aria-label="Copy answer"
+            >
+              <Copy className="h-4 w-4" />
+            </Button>
+            <Button
+              variant="outline"
+              size="icon"
+              asChild
+              aria-label="Tweet answer"
+            >
+              <a
+                href={twitterUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={(event) => event.stopPropagation()}
+              >
+                <Twitter className="h-4 w-4" />
+              </a>
+            </Button>
+          </div>
+        )}
+      </CardContent>
+    </Card>
   );
 }
